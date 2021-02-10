@@ -1,6 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { Box, Grid, makeStyles, Typography } from "@material-ui/core/";
+import {
+  Box,
+  Grid,
+  makeStyles,
+  Typography,
+  Card,
+  CardActionArea,
+  CardContent,
+  Button,
+} from "@material-ui/core/";
+import Footer from "../components/Footer";
 import axios from "axios";
 import NavBar from "../components/NavBar";
 // import Footer from "../components/Footer";
@@ -91,11 +101,45 @@ const useStyles = makeStyles({
     fontWeight: "bold",
   },
   contentWrap: {
-    marginTop: 20
+    marginTop: 20,
+    paddingLeft: 264,
+    paddingRight: 264,
   },
   topBilledCast: {
-    fontWeight: 'bold',
-    marginLeft: 264
+    fontWeight: "bold",
+  },
+  movieInfo: {
+    marginLeft: 45,
+    marginTop: 60
+  },
+  gallery: {
+    marginTop: 5,
+    overflowX: "scroll",
+  },
+  castCard: {
+    width: 138,
+  },
+  castPic: {
+    width: "100%",
+    height: 175,
+  },
+  castName: {
+    fontSize: "12px",
+    fontWeight: "bold",
+  },
+  castCha: {
+    fontSize: "15px",
+  },
+  fullCast: {
+    marginTop: 25,
+  },
+  statusTitle: {
+    fontWeight: "bold",
+    marginTop: 10
+  },
+  keywords: {
+    marginTop: 10,
+    marginRight: 10
   }
 });
 
@@ -137,17 +181,57 @@ export default function PosterInfo() {
       });
     }
   };
-  // const topCast = () => {
-  //   const objCast = t(info, "credits.cast").safeObject
-  //   if (objCast) {
-  //     return obj.map(())
-  //   }
-  // }
+  const cast = () => {
+    const castObj = t(info, "credits.cast").safeObject;
+    if (castObj) {
+      return castObj.map((element, index) => {
+        if (index < 10) {
+          return (
+            <Grid item key={index}>
+              <Card className={classes.castCard}>
+                <CardActionArea>
+                  <img
+                    className={classes.castPic}
+                    src={
+                      "https://image.tmdb.org/t/p/original" +
+                      element.profile_path
+                    }
+                    alt={element.profile_path}
+                  ></img>
+                  <CardContent>
+                    <Typography className={classes.castName}>
+                      {element.name}
+                    </Typography>
+                    <Typography className={classes.castCha}>
+                      {element.character}
+                    </Typography>
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            </Grid>
+          );
+        }
+      });
+    }
+  };
+  const keywordsList = () => {
+    const keywordsObj = t(info, "keywords.keywords").safeObject;
+    if (keywordsObj) {
+      return keywordsObj.map((element, index) => {
+        if (index < 15) {
+          console.log(element.name)
+          return (
+            <Button className={classes.keywords} variant="contained" key={index}>{element.name}</Button>
+          )
+        }
+      })
+    }
+  }
 
   useEffect(() => {
     axios
       .get(
-        `https://api.themoviedb.org/3/movie/${movieId}?api_key=84740a476602b16276f7d9e1093ff572&append_to_response=videos,credits`
+        `https://api.themoviedb.org/3/movie/${movieId}?api_key=84740a476602b16276f7d9e1093ff572&append_to_response=videos,credits,keywords`
       )
       .then((res) => {
         setInfo(res.data);
@@ -212,14 +296,49 @@ export default function PosterInfo() {
           </Box>
         </Box>
         <Box className={classes.contentWrap}>
-          <Typography className={classes.topBilledCast} variant='h6'>Top Billed Cast</Typography>
-          <Box>
-
-          </Box>
-          <Box>
-
-          </Box>
+          <Grid container>
+            <Grid item container xs={9}>
+              <Typography className={classes.topBilledCast} variant="h6">
+                Top Billed Cast
+              </Typography>
+              <Grid
+                item
+                container
+                spacing={4}
+                className={classes.gallery}
+                wrap="nowrap"
+              >
+                {cast()}
+              </Grid>
+              <Typography className={classes.fullCast} variant="h6">
+                Full Cast
+              </Typography>
+            </Grid>
+            <Grid item xs={3}>
+              <Box className={classes.movieInfo}>
+                <Typography className={classes.statusTitle}>Status</Typography>
+                <Typography>{info.status}</Typography>
+                <Typography className={classes.statusTitle}>Original Language</Typography>
+                <Typography>{info.original_language}</Typography>
+                <Typography className={classes.statusTitle}>Keywords</Typography>
+                {keywordsList()}
+              </Box>
+            </Grid>
+          </Grid>
+          <br />
+          <hr />
+          <br />
+          <Typography variant="h6">Social</Typography>
+          <br />
+          <hr />
+          <br />
+          <Typography variant="h6">Media</Typography>
+          <br />
+          <hr />
+          <br />
+          <Typography variant="h6">Recommendations</Typography>
         </Box>
+        <Footer />
       </Box>
     </div>
   );
