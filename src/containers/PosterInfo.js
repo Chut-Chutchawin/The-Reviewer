@@ -9,6 +9,8 @@ import {
   CardActionArea,
   CardContent,
   Button,
+  Divider,
+  List,
 } from "@material-ui/core/";
 import Footer from "../components/Footer";
 import axios from "axios";
@@ -110,7 +112,7 @@ const useStyles = makeStyles({
   },
   movieInfo: {
     marginLeft: 45,
-    marginTop: 60
+    marginTop: 60,
   },
   gallery: {
     marginTop: 5,
@@ -118,29 +120,34 @@ const useStyles = makeStyles({
   },
   castCard: {
     width: 138,
+    height: "100%"
   },
   castPic: {
     width: "100%",
     height: 175,
   },
   castName: {
-    fontSize: "12px",
+    fontSize: "15.5px",
     fontWeight: "bold",
   },
   castCha: {
-    fontSize: "15px",
+    fontSize: "13px",
   },
   fullCast: {
     marginTop: 25,
   },
   statusTitle: {
     fontWeight: "bold",
-    marginTop: 10
+    marginTop: 10,
   },
   keywords: {
     marginTop: 10,
-    marginRight: 10
-  }
+    marginRight: 10,
+  },
+  recMedia: {
+    width: 250,
+    height: 141,
+  },
 });
 
 export default function PosterInfo() {
@@ -218,20 +225,52 @@ export default function PosterInfo() {
     const keywordsObj = t(info, "keywords.keywords").safeObject;
     if (keywordsObj) {
       return keywordsObj.map((element, index) => {
-        if (index < 15) {
-          console.log(element.name)
+        if (index < 5) {
           return (
-            <Button className={classes.keywords} variant="contained" key={index}>{element.name}</Button>
-          )
+            <Button
+              className={classes.keywords}
+              variant="contained"
+              key={index}
+            >
+              {element.name}
+            </Button>
+          );
         }
-      })
+      });
     }
-  }
-
+  };
+  const recommendations = () => {
+    const recObj = t(info, "recommendations.results").safeObject;
+    if (recObj) {
+      return recObj.map((element, index) => {
+        if (index < 10) {
+          return (
+            <Grid item key={element.id}>
+              <Card>
+                <CardActionArea>
+                  <img
+                    className={classes.recMedia}
+                    src={
+                      "https://image.tmdb.org/t/p/original" +
+                      element.poster_path
+                    }
+                    alt={element.poster_path}
+                  ></img>
+                  <CardContent>
+                    <Typography>{element.title}</Typography>
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            </Grid>
+          );
+        }
+      });
+    }
+  };
   useEffect(() => {
     axios
       .get(
-        `https://api.themoviedb.org/3/movie/${movieId}?api_key=84740a476602b16276f7d9e1093ff572&append_to_response=videos,credits,keywords`
+        `https://api.themoviedb.org/3/movie/${movieId}?api_key=84740a476602b16276f7d9e1093ff572&append_to_response=videos,credits,keywords,recommendations`
       )
       .then((res) => {
         setInfo(res.data);
@@ -310,24 +349,30 @@ export default function PosterInfo() {
               >
                 {cast()}
               </Grid>
-              <Typography className={classes.fullCast} variant="h6">
-                Full Cast
-              </Typography>
             </Grid>
             <Grid item xs={3}>
               <Box className={classes.movieInfo}>
                 <Typography className={classes.statusTitle}>Status</Typography>
                 <Typography>{info.status}</Typography>
-                <Typography className={classes.statusTitle}>Original Language</Typography>
+                <Typography className={classes.statusTitle}>
+                  Original Language
+                </Typography>
                 <Typography>{info.original_language}</Typography>
-                <Typography className={classes.statusTitle}>Keywords</Typography>
+                <Typography className={classes.statusTitle}>
+                  Keywords
+                </Typography>
                 {keywordsList()}
               </Box>
             </Grid>
+            <Grid item xs={9}>
+              <Typography className={classes.fullCast} variant="h6">
+                Full Cast
+              </Typography>
+              <Divider/>
+            </Grid>
+            <Grid item xs={3}></Grid>
           </Grid>
-          <br />
-          <hr />
-          <br />
+
           <Typography variant="h6">Social</Typography>
           <br />
           <hr />
@@ -337,6 +382,9 @@ export default function PosterInfo() {
           <hr />
           <br />
           <Typography variant="h6">Recommendations</Typography>
+          <Grid container spacing={3} className={classes.gallery} wrap="nowrap">
+            {recommendations()}
+          </Grid>
         </Box>
         <Footer />
       </Box>
