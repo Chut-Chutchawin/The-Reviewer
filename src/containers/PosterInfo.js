@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { useParams } from "react-router";
 import {
   Box,
@@ -10,7 +11,6 @@ import {
   CardContent,
   Button,
   Divider,
-  List,
 } from "@material-ui/core/";
 import Footer from "../components/Footer";
 import axios from "axios";
@@ -104,6 +104,7 @@ const useStyles = makeStyles({
   },
   contentWrap: {
     marginTop: 20,
+    marginBottom: 40,
     paddingLeft: 264,
     paddingRight: 264,
   },
@@ -120,7 +121,7 @@ const useStyles = makeStyles({
   },
   castCard: {
     width: 138,
-    height: "100%"
+    height: "100%",
   },
   castPic: {
     width: "100%",
@@ -133,8 +134,9 @@ const useStyles = makeStyles({
   castCha: {
     fontSize: "13px",
   },
-  fullCast: {
-    marginTop: 25,
+  contentHeader: {
+    fontWeight: "bold",
+    marginTop: 35,
   },
   statusTitle: {
     fontWeight: "bold",
@@ -145,15 +147,26 @@ const useStyles = makeStyles({
     marginRight: 10,
   },
   recMedia: {
-    width: 250,
+    width: 240,
     height: 141,
   },
+  recCard: {
+    width: 240,
+    height: "100%",
+  },
+  recTitle: {
+    fontSize: "14",
+  },
+  // footer: {
+  //   marginTop: 500
+  // }
 });
 
 export default function PosterInfo() {
   const classes = useStyles();
   const { movieId } = useParams();
   const [info, setInfo] = useState("");
+  const [toggle, setToggle] = useState(true)
   const genres = () => {
     if (info.genres) {
       let x = "";
@@ -246,21 +259,31 @@ export default function PosterInfo() {
         if (index < 10) {
           return (
             <Grid item key={element.id}>
-              <Card>
-                <CardActionArea>
-                  <img
-                    className={classes.recMedia}
-                    src={
-                      "https://image.tmdb.org/t/p/original" +
-                      element.poster_path
-                    }
-                    alt={element.poster_path}
-                  ></img>
-                  <CardContent>
-                    <Typography>{element.title}</Typography>
-                  </CardContent>
-                </CardActionArea>
-              </Card>
+              <Link
+                to={{
+                  pathname: `/movie/${element.id}`,
+              
+                }}
+                onClick={() => setToggle(!toggle)}
+              >
+                <Card className={classes.recCard}>
+                  <CardActionArea>
+                    <img
+                      className={classes.recMedia}
+                      src={
+                        "https://image.tmdb.org/t/p/original" +
+                        element.poster_path
+                      }
+                      alt={element.poster_path}
+                    ></img>
+                    <CardContent>
+                      <Typography className={classes.recTitle} noWrap="true">
+                        {element.title}
+                      </Typography>
+                    </CardContent>
+                  </CardActionArea>
+                </Card>
+              </Link>
             </Grid>
           );
         }
@@ -275,7 +298,7 @@ export default function PosterInfo() {
       .then((res) => {
         setInfo(res.data);
       });
-  }, []);
+  }, [toggle]);
 
   return (
     <div>
@@ -365,25 +388,46 @@ export default function PosterInfo() {
               </Box>
             </Grid>
             <Grid item xs={9}>
-              <Typography className={classes.fullCast} variant="h6">
+              <Typography className={classes.contentHeader} variant="h6">
                 Full Cast
               </Typography>
-              <Divider/>
+              <br />
+              <Divider />
             </Grid>
             <Grid item xs={3}></Grid>
-          </Grid>
-
-          <Typography variant="h6">Social</Typography>
-          <br />
-          <hr />
-          <br />
-          <Typography variant="h6">Media</Typography>
-          <br />
-          <hr />
-          <br />
-          <Typography variant="h6">Recommendations</Typography>
-          <Grid container spacing={3} className={classes.gallery} wrap="nowrap">
-            {recommendations()}
+            <Grid item xs={9}>
+              <Typography className={classes.contentHeader} variant="h6">
+                Social
+              </Typography>
+              <br />
+              <Divider />
+            </Grid>
+            <Grid item xs={3}></Grid>
+            <Grid item xs={9}>
+              <Typography className={classes.contentHeader} variant="h6">
+                Media
+              </Typography>
+              <br />
+              <Divider />
+            </Grid>
+            <Grid item xs={3}></Grid>
+            <Grid item xs={9}>
+              <Typography className={classes.contentHeader} variant="h6">
+                Recommendations
+              </Typography>
+            </Grid>
+            <Grid item xs={3}></Grid>
+            <Grid
+              item
+              container
+              spacing={3}
+              className={classes.gallery}
+              wrap="nowrap"
+              xs={9}
+            >
+              {recommendations()}
+            </Grid>
+            <Grid item xs={3}></Grid>
           </Grid>
         </Box>
         <Footer />
