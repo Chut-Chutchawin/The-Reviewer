@@ -8,6 +8,7 @@ import {
   Box,
   fade,
 } from "@material-ui/core";
+import { ContactsOutlined } from "@material-ui/icons";
 import SearchIcon from "@material-ui/icons/Search";
 import React from "react";
 import { Link } from "react-router-dom";
@@ -18,8 +19,8 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: 900,
   },
   link: {
-    textDecoration: 'none',
-    color: 'white'
+    textDecoration: "none",
+    color: "white",
   },
   moviesButton: {
     marginLeft: 20,
@@ -80,7 +81,11 @@ const useStyles = makeStyles((theme) => ({
 
 export default function NavBar() {
   const classes = useStyles();
-
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+    
+    }
+  };
   return (
     <div>
       <AppBar>
@@ -114,6 +119,7 @@ export default function NavBar() {
                     input: classes.inputInput,
                   }}
                   inputProps={{ "aria-label": "search" }}
+                  onKeyDown={handleKeyDown}
                 />
               </div>
             </Box>

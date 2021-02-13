@@ -134,6 +134,9 @@ const useStyles = makeStyles({
   castCha: {
     fontSize: "13px",
   },
+  fullCast: {
+    marginTop: 35,
+  },
   contentHeader: {
     fontWeight: "bold",
     marginTop: 35,
@@ -147,26 +150,28 @@ const useStyles = makeStyles({
     marginRight: 10,
   },
   recMedia: {
-    width: 240,
+    width: 250,
     height: 141,
   },
   recCard: {
-    width: 240,
+    width: 250,
     height: "100%",
+    border: "none",
+    boxShadow: "none",
   },
   recTitle: {
     fontSize: "14",
   },
-  // footer: {
-  //   marginTop: 500
-  // }
+  link: {
+    textDecoration: "none",
+  },
 });
 
 export default function PosterInfo() {
   const classes = useStyles();
   const { movieId } = useParams();
   const [info, setInfo] = useState("");
-  const [toggle, setToggle] = useState(true)
+  const [toggle, setToggle] = useState(true);
   const genres = () => {
     if (info.genres) {
       let x = "";
@@ -252,6 +257,9 @@ export default function PosterInfo() {
       });
     }
   };
+  const handleClick = () => {
+    setToggle(!toggle);
+  };
   const recommendations = () => {
     const recObj = t(info, "recommendations.results").safeObject;
     if (recObj) {
@@ -260,11 +268,11 @@ export default function PosterInfo() {
           return (
             <Grid item key={element.id}>
               <Link
+                className={classes.link}
                 to={{
                   pathname: `/movie/${element.id}`,
-              
                 }}
-                onClick={() => setToggle(!toggle)}
+                onClick={() => handleClick()}
               >
                 <Card className={classes.recCard}>
                   <CardActionArea>
@@ -272,7 +280,7 @@ export default function PosterInfo() {
                       className={classes.recMedia}
                       src={
                         "https://image.tmdb.org/t/p/original" +
-                        element.poster_path
+                        element.backdrop_path
                       }
                       alt={element.poster_path}
                     ></img>
@@ -290,6 +298,9 @@ export default function PosterInfo() {
       });
     }
   };
+  window.onbeforeunload = () => {
+    window.scrollTo(0, 0);
+  };
   useEffect(() => {
     axios
       .get(
@@ -298,6 +309,9 @@ export default function PosterInfo() {
       .then((res) => {
         setInfo(res.data);
       });
+    return () => {
+      window.location.reload();
+    };
   }, [toggle]);
 
   return (
@@ -347,7 +361,6 @@ export default function PosterInfo() {
                 style={{ fontSize: 30 }}
               />
               <Typography className={classes.playTrailer} component="span">
-                {" "}
                 Play Trailer
               </Typography>
             </Box>
@@ -388,9 +401,7 @@ export default function PosterInfo() {
               </Box>
             </Grid>
             <Grid item xs={9}>
-              <Typography className={classes.contentHeader} variant="h6">
-                Full Cast
-              </Typography>
+              <Typography className={classes.fullCast}>Full Cast</Typography>
               <br />
               <Divider />
             </Grid>
@@ -403,7 +414,7 @@ export default function PosterInfo() {
               <Divider />
             </Grid>
             <Grid item xs={3}></Grid>
-            <Grid item xs={9}>
+            {/* <Grid item xs={9}>
               <Typography className={classes.contentHeader} variant="h6">
                 Media
               </Typography>
@@ -416,7 +427,7 @@ export default function PosterInfo() {
                 Recommendations
               </Typography>
             </Grid>
-            <Grid item xs={3}></Grid>
+            <Grid item xs={3}></Grid> */}
             <Grid
               item
               container
