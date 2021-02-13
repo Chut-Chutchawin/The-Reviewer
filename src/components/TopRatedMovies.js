@@ -52,6 +52,9 @@ export default function TopRatedMovies() {
       .then((res) => {
         setTopRatedMovies(res.data.results);
       });
+    return () => {
+      window.location.reload();
+    };
   }, []);
 
   const showMovies = () => {
@@ -67,7 +70,7 @@ export default function TopRatedMovies() {
             <Card className={classes.card}>
               <CardActionArea>
                 <img
-                  className={classes.media}                  
+                  className={classes.media}
                   src={
                     "https://image.tmdb.org/t/p/original" + movie.poster_path
                   }

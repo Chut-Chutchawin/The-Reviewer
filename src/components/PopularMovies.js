@@ -9,14 +9,14 @@ import {
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
-import axios from 'axios'
+import axios from "axios";
 
 const useStyles = makeStyles({
   root: {
     marginTop: 20,
   },
   link: {
-    textDecoration: 'none'
+    textDecoration: "none",
   },
   card: {
     border: "none",
@@ -52,6 +52,9 @@ export default function PopularMovies() {
       .then((res) => {
         setPopularMovie(res.data.results);
       });
+    return () => {
+      window.location.reload();
+    };
   }, []);
 
   const showMovies = () => {

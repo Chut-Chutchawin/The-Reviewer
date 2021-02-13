@@ -11,7 +11,7 @@ import {
 import { ContactsOutlined } from "@material-ui/icons";
 import SearchIcon from "@material-ui/icons/Search";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   brand: {
@@ -79,7 +79,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function NavBar() {
+function NavBar() {
   const classes = useStyles();
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
@@ -137,3 +137,5 @@ export default function NavBar() {
     </div>
   );
 }
+
+export default withRouter(NavBar)

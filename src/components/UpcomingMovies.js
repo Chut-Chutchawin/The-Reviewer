@@ -14,7 +14,7 @@ import { Link } from "react-router-dom";
 const useStyles = makeStyles({
   root: {
     marginTop: 40,
-    marginBottom: 60
+    marginBottom: 60,
   },
   link: {
     textDecoration: "none",
@@ -54,9 +54,9 @@ export default function UpcomingMovies() {
     month = String(month);
   }
   if (day < 10) {
-    day = "0" + String(day+1);
+    day = "0" + String(day + 1);
   } else {
-    day = String(day+1);
+    day = String(day + 1);
   }
   let upcomingDate = String(year) + "-" + month + "-" + day;
 
@@ -68,6 +68,9 @@ export default function UpcomingMovies() {
       .then((res) => {
         setUpcomingMovies(res.data.results);
       });
+    return () => {
+      window.location.reload();
+    };
   }, []);
 
   const showMovies = () => {
