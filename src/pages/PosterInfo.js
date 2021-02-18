@@ -15,7 +15,6 @@ import {
 import Footer from "../components/Footer";
 import axios from "axios";
 import NavBar from "../components/NavBar";
-// import Footer from "../components/Footer";
 import Star from "@material-ui/icons/Star";
 import ArrowRight from "@material-ui/icons/ArrowRight";
 import t from "typy";
@@ -172,6 +171,7 @@ export default function PosterInfo() {
   const { movieId } = useParams();
   const [info, setInfo] = useState("");
   const [toggle, setToggle] = useState(true);
+
   const genres = () => {
     if (info.genres) {
       let x = "";
@@ -185,6 +185,7 @@ export default function PosterInfo() {
       return <Typography display="inline">&nbsp;&nbsp;- {x}</Typography>;
     }
   };
+
   const crews = () => {
     const obj = t(info, "credits.crew").safeObject;
     if (obj) {
@@ -206,6 +207,7 @@ export default function PosterInfo() {
       });
     }
   };
+
   const cast = () => {
     const castObj = t(info, "credits.cast").safeObject;
     if (castObj) {
@@ -239,6 +241,7 @@ export default function PosterInfo() {
       });
     }
   };
+
   const keywordsList = () => {
     const keywordsObj = t(info, "keywords.keywords").safeObject;
     if (keywordsObj) {
@@ -257,9 +260,11 @@ export default function PosterInfo() {
       });
     }
   };
+
   const handleClick = () => {
     setToggle(!toggle);
   };
+
   const recommendations = () => {
     const recObj = t(info, "recommendations.results").safeObject;
     if (recObj) {
@@ -298,9 +303,11 @@ export default function PosterInfo() {
       });
     }
   };
+
   window.onbeforeunload = () => {
     window.scrollTo(0, 0);
   };
+  
   useEffect(() => {
     axios
       .get(

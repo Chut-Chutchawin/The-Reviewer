@@ -81,6 +81,7 @@ const useStyles = makeStyles((theme) => ({
 
 function NavBar() {
   const classes = useStyles();
+  
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
     
