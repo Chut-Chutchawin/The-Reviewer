@@ -8,10 +8,10 @@ import {
   Box,
   fade,
 } from "@material-ui/core";
-import { ContactsOutlined } from "@material-ui/icons";
 import SearchIcon from "@material-ui/icons/Search";
 import React from "react";
-import { Link, withRouter } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import Results from '../pages/Results'
 
 const useStyles = makeStyles((theme) => ({
   brand: {
@@ -79,12 +79,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function NavBar() {
+export default function NavBar() {
   const classes = useStyles();
-  
+  const history = useHistory()
+
   const handleKeyDown = (event) => {
+    console.log(event.target.value)
     if (event.key === "Enter") {
-    
+      history.push({pathname: '/results', state: {search: event.target.value}})
+      window.location.reload()
     }
   };
   return (
@@ -139,4 +142,3 @@ function NavBar() {
   );
 }
 
-export default withRouter(NavBar)

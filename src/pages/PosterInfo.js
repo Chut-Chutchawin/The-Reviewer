@@ -435,6 +435,12 @@ export default function PosterInfo() {
               </Typography>
             </Grid>
             <Grid item xs={3}></Grid> */}
+            <Grid item xs={9}>
+              <Typography className={classes.contentHeader} variant="h6">
+                Recommendations
+              </Typography>          
+            </Grid>
+            <Grid item xs={3}></Grid>
             <Grid
               item
               container
