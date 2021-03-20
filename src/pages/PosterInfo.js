@@ -21,8 +21,10 @@ import axios from "axios";
 import NavBar from "../components/NavBar";
 import Star from "@material-ui/icons/Star";
 import ArrowRight from "@material-ui/icons/ArrowRight";
+import ReviewCaed from '../components/ReviewCaed'
 import t from "typy";
-import firebase from "../firebase";
+import firebase from '../firebase'
+
 
 const useStyles = makeStyles((theme) => ({
   wrap: {
@@ -219,7 +221,6 @@ export default function PosterInfo() {
   const [toggle, setToggle] = useState(true);
   const [sentiment, setSentiment] = useState('pos')
   // const [type, setType] = useState('')
-
   const genres = () => {
     if (info.genres) {
       let x = "";
@@ -352,42 +353,41 @@ export default function PosterInfo() {
     }
   };
 
-  const ref = firebase.firestore().collection(`${info.title}`);
-  const getReview = () => {
-    ref.onSnapshot((querySnapshot) => {
-      const items = [];
-      querySnapshot.forEach((doc) => {
-        items.push(doc.data());
-      });
-      setReviews(items);
-      console.log(items)
-    });
-  };
+  // const ref = firebase.firestore().collection(`${info.title}`);
+  // const getReview = () => {
+  //   ref.onSnapshot((querySnapshot) => {
+  //     const items = [];
+  //     querySnapshot.forEach((doc) => {
+  //       items.push(doc.data());
+  //     });
+  //     setReviews(items);
+  //   });
+  // };
 
-  const showReview = () => {
-    if (reviews) {
-      return reviews.map((obj) => (
-        <Grid key={obj._id} xs={12}>
-          <Card className={classes.reviewCard}>
-            <CardActionArea className={classes.reviewAction}>
-              <img className={classes.reviewPic} src={obj.avatar}></img>
-              <Box className={classes.reviewDescription}>
-                <Typography className={classes.reviewTitle}>
-                  A review by {obj.nickname}
-                </Typography>
-                <Typography className={classes.reviewDate}>
-                  Written by {obj.nickname} on {obj.date}
-                </Typography>
-                <Typography className={classes.reviewOverview}>
-                  {obj.desc}
-                </Typography>
-              </Box>
-            </CardActionArea>
-          </Card>
-        </Grid>
-      ));
-    }
-  };
+  // const showReview = () => {
+  //   if (reviews) {
+  //     return reviews.map((obj) => (
+  //       <Grid key={obj._id} xs={12}>
+  //         <Card className={classes.reviewCard}>
+  //           <CardActionArea className={classes.reviewAction}>
+  //             <img className={classes.reviewPic} src={obj.avatar}></img>
+  //             <Box className={classes.reviewDescription}>
+  //               <Typography className={classes.reviewTitle}>
+  //                 A review by {obj.nickname}
+  //               </Typography>
+  //               <Typography className={classes.reviewDate}>
+  //                 Written by {obj.nickname} on {obj.date}
+  //               </Typography>
+  //               <Typography className={classes.reviewOverview}>
+  //                 {obj.desc}
+  //               </Typography>
+  //             </Box>
+  //           </CardActionArea>
+  //         </Card>
+  //       </Grid>
+  //     ));
+  //   }
+  // };
 
   window.onbeforeunload = () => {
     window.scrollTo(0, 0);
@@ -509,7 +509,7 @@ export default function PosterInfo() {
                 display="inline"
               >
                 Reviews
-                {getReview()}
+                {/* {getReview()} */}
               </Typography>
               <Button variant="contained" className={classes.positive} onClick={() => setSentiment('pos')}>
                 Positive
@@ -536,9 +536,8 @@ export default function PosterInfo() {
             </Grid>
             <Grid item xs={3}></Grid>
             <Grid item container xs={9}>
-              {showReview()}
-              <br />
-              <Divider />
+              <ReviewCaed title={info.title}/>
+              {/* {showReview()} */}
             </Grid>
             <Grid item xs={3}></Grid>
             <Grid item xs={9} className={classes.low}>
