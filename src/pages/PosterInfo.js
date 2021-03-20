@@ -11,6 +11,10 @@ import {
   CardContent,
   Button,
   Divider,
+  InputLabel,
+  MenuItem,
+  FormControl,
+  Select,
 } from "@material-ui/core/";
 import Footer from "../components/Footer";
 import axios from "axios";
@@ -18,8 +22,9 @@ import NavBar from "../components/NavBar";
 import Star from "@material-ui/icons/Star";
 import ArrowRight from "@material-ui/icons/ArrowRight";
 import t from "typy";
+import firebase from "../firebase";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   wrap: {
     marginTop: 110,
     height: 570,
@@ -164,13 +169,56 @@ const useStyles = makeStyles({
   link: {
     textDecoration: "none",
   },
-});
+  reviewTitle: {
+    fontWeight: "bold",
+    fontSize: "19px",
+  },
+  reviewDate: {
+    marginTop: 5,
+    color: "#00000099",
+  },
+  reviewOverview: {
+    marginTop: 15,
+  },
+  reviewCard: {
+    marginTop: 35,
+  },
+  reviewPic: {
+    width: 60,
+    height: 60,
+  },
+  formControl: {
+    marginLeft: 20,
+    minWidth: 120,
+    margin: theme.spacing(1),
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
+  low: {
+    marginTop: 15,
+  },
+  positive: {
+    marginLeft: 20,
+    backgroundColor: 'green'
+  },
+  negative: {
+    marginLeft: 20,
+    backgroundColor: 'red'
+  },
+  neutral: {
+    marginLeft: 20,
+  }
+}));
 
 export default function PosterInfo() {
   const classes = useStyles();
   const { movieId } = useParams();
   const [info, setInfo] = useState("");
+  const [reviews, setReviews] = useState([]);
   const [toggle, setToggle] = useState(true);
+  const [sentiment, setSentiment] = useState('pos')
+  // const [type, setType] = useState('')
 
   const genres = () => {
     if (info.genres) {
@@ -304,10 +352,51 @@ export default function PosterInfo() {
     }
   };
 
+  const ref = firebase.firestore().collection(`${info.title}`);
+  const getReview = () => {
+    ref.onSnapshot((querySnapshot) => {
+      const items = [];
+      querySnapshot.forEach((doc) => {
+        items.push(doc.data());
+      });
+      setReviews(items);
+      console.log(items)
+    });
+  };
+
+  const showReview = () => {
+    if (reviews) {
+      return reviews.map((obj) => (
+        <Grid key={obj._id} xs={12}>
+          <Card className={classes.reviewCard}>
+            <CardActionArea className={classes.reviewAction}>
+              <img className={classes.reviewPic} src={obj.avatar}></img>
+              <Box className={classes.reviewDescription}>
+                <Typography className={classes.reviewTitle}>
+                  A review by {obj.nickname}
+                </Typography>
+                <Typography className={classes.reviewDate}>
+                  Written by {obj.nickname} on {obj.date}
+                </Typography>
+                <Typography className={classes.reviewOverview}>
+                  {obj.desc}
+                </Typography>
+              </Box>
+            </CardActionArea>
+          </Card>
+        </Grid>
+      ));
+    }
+  };
+
   window.onbeforeunload = () => {
     window.scrollTo(0, 0);
   };
-  
+
+  // useEffect(() => {
+  //   getReview()
+  // }, [])
+
   useEffect(() => {
     axios
       .get(
@@ -414,17 +503,45 @@ export default function PosterInfo() {
             </Grid>
             <Grid item xs={3}></Grid>
             <Grid item xs={9}>
-              <Typography className={classes.contentHeader} variant="h6">
-                Social
+              <Typography
+                className={classes.contentHeader}
+                variant="h6"
+                display="inline"
+              >
+                Reviews
+                {getReview()}
               </Typography>
+              <Button variant="contained" className={classes.positive} onClick={() => setSentiment('pos')}>
+                Positive
+              </Button>
+              <Button variant="contained" className={classes.negative} onClick={() => setSentiment('neg')}>
+                Negative
+              </Button>
+              <Button variant="contained" className={classes.neutral} onClick={() => setSentiment('neu')}>
+                Neutral
+              </Button>
+              {/* <FormControl className={classes.formControl}>
+                <InputLabel id="demo-simple-select-label">Sentiment</InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  // value={age}
+                  // onChange={handleChange}
+                >
+                  <MenuItem value='pos'>Positive</MenuItem>
+                  <MenuItem value='neg'>Negative</MenuItem>
+                  <MenuItem value='neu'>Neutral</MenuItem>
+                </Select>
+              </FormControl> */}
+            </Grid>
+            <Grid item xs={3}></Grid>
+            <Grid item container xs={9}>
+              {showReview()}
               <br />
               <Divider />
             </Grid>
             <Grid item xs={3}></Grid>
-            {/* <Grid item xs={9}>
-              <Typography className={classes.contentHeader} variant="h6">
-                Media
-              </Typography>
+            <Grid item xs={9} className={classes.low}>
               <br />
               <Divider />
             </Grid>
@@ -433,12 +550,6 @@ export default function PosterInfo() {
               <Typography className={classes.contentHeader} variant="h6">
                 Recommendations
               </Typography>
-            </Grid>
-            <Grid item xs={3}></Grid> */}
-            <Grid item xs={9}>
-              <Typography className={classes.contentHeader} variant="h6">
-                Recommendations
-              </Typography>          
             </Grid>
             <Grid item xs={3}></Grid>
             <Grid
