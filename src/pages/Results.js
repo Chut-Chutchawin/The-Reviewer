@@ -47,7 +47,6 @@ const useStyles = makeStyles({
 
 export default function Results() {
   const location = useLocation();
-  console.log(location);
   const [info, setInfo] = useState("");
   const classes = useStyles();
   useEffect(() => {

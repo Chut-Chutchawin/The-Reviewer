@@ -84,7 +84,6 @@ export default function NavBar() {
   const history = useHistory()
 
   const handleKeyDown = (event) => {
-    console.log(event.target.value)
     if (event.key === "Enter") {
       history.push({pathname: '/results', state: {search: event.target.value}})
       window.location.reload()

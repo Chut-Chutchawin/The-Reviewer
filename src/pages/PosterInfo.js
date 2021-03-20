@@ -21,10 +21,9 @@ import axios from "axios";
 import NavBar from "../components/NavBar";
 import Star from "@material-ui/icons/Star";
 import ArrowRight from "@material-ui/icons/ArrowRight";
-import ReviewCaed from '../components/ReviewCaed'
+import ReviewCaed from "../components/ReviewCaed";
 import t from "typy";
-import firebase from '../firebase'
-
+import firebase from "../firebase";
 
 const useStyles = makeStyles((theme) => ({
   wrap: {
@@ -202,24 +201,25 @@ const useStyles = makeStyles((theme) => ({
   },
   positive: {
     marginLeft: 20,
-    backgroundColor: 'green'
+    backgroundColor: "green",
   },
   negative: {
     marginLeft: 20,
-    backgroundColor: 'red'
+    backgroundColor: "red",
   },
   neutral: {
     marginLeft: 20,
-  }
+  },
 }));
 
 export default function PosterInfo() {
   const classes = useStyles();
   const { movieId } = useParams();
   const [info, setInfo] = useState("");
-  const [reviews, setReviews] = useState([]);
+  // const [reviews, setReviews] = useState([]);
   const [toggle, setToggle] = useState(true);
-  const [sentiment, setSentiment] = useState('pos')
+  const [reviewToggle, setReviewToggle] = useState(true);
+  const [sentiment, setSentiment] = useState("pos");
   // const [type, setType] = useState('')
   const genres = () => {
     if (info.genres) {
@@ -312,6 +312,21 @@ export default function PosterInfo() {
 
   const handleClick = () => {
     setToggle(!toggle);
+  };
+
+  const handlePos = () => {
+    setSentiment("pos");
+    setReviewToggle(!reviewToggle);
+  };
+
+  const handleNeg = () => {
+    setSentiment("neg");
+    setReviewToggle(!reviewToggle);
+  };
+
+  const handleNeu = () => {
+    setSentiment("neu");
+    setReviewToggle(!reviewToggle);
   };
 
   const recommendations = () => {
@@ -511,13 +526,25 @@ export default function PosterInfo() {
                 Reviews
                 {/* {getReview()} */}
               </Typography>
-              <Button variant="contained" className={classes.positive} onClick={() => setSentiment('pos')}>
+              <Button
+                variant="contained"
+                className={classes.positive}
+                onClick={() => handlePos()}
+              >
                 Positive
               </Button>
-              <Button variant="contained" className={classes.negative} onClick={() => setSentiment('neg')}>
+              <Button
+                variant="contained"
+                className={classes.negative}
+                onClick={() => handleNeg()}
+              >
                 Negative
               </Button>
-              <Button variant="contained" className={classes.neutral} onClick={() => setSentiment('neu')}>
+              <Button
+                variant="contained"
+                className={classes.neutral}
+                onClick={() => handleNeu()}
+              >
                 Neutral
               </Button>
               {/* <FormControl className={classes.formControl}>
@@ -526,7 +553,7 @@ export default function PosterInfo() {
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
                   // value={age}
-                  // onChange={handleChange}
+                  // onChange={ Change}
                 >
                   <MenuItem value='pos'>Positive</MenuItem>
                   <MenuItem value='neg'>Negative</MenuItem>
@@ -536,7 +563,7 @@ export default function PosterInfo() {
             </Grid>
             <Grid item xs={3}></Grid>
             <Grid item container xs={9}>
-              <ReviewCaed title={info.title}/>
+              <ReviewCaed title={info.title} sentiment={sentiment} toggle={reviewToggle}/>
               {/* {showReview()} */}
             </Grid>
             <Grid item xs={3}></Grid>

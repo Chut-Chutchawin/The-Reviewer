@@ -40,22 +40,26 @@ const useStyles = makeStyles({
 export default function ReviewCaed(props) {
   const [reviews, setReviews] = useState([]);
   const classes = useStyles();
-  console.log(props.title);
-  const ref = firebase.firestore().collection(`${props.title}`);
-
+  const ref = firebase.firestore().collection(`${props.title}`).where("sentiment", "==", `${props.sentiment}`);
   const getReview = () => {
-    ref.onSnapshot((querySnapshot) => {
-      const items = [];
-      querySnapshot.forEach((doc) => {
-        items.push(doc.data());
-      });
-      setReviews(items);
-    });
+    // ref
+    //   .where("sentiment", "==", `${props.sentiment}`)
+    //   .onSnapshot((querySnapshot) => {
+    //     const items = [];
+    //     querySnapshot.forEach((doc) => {
+    //       items.push(doc.data());
+    //     });
+    //     setReviews(items);
+    //   });
+    ref.get().then((item) => {
+      const items = item.docs.map((doc) => doc.data())
+      setReviews(items)
+    })
   };
-
+  console.log(props.sentiment);
   useEffect(() => {
-    getReview()
-  }, [])
+    getReview();
+  }, [props.toggle]);
 
   const showReview = () => {
     if (reviews) {
@@ -83,8 +87,8 @@ export default function ReviewCaed(props) {
   };
   return (
     <div>
-        {getReview()}
-        {showReview()}
+      {getReview()}
+      {showReview()}
     </div>
   );
 }
