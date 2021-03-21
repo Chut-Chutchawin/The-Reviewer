@@ -260,7 +260,7 @@ export default function PosterInfo() {
     const castObj = t(info, "credits.cast").safeObject;
     if (castObj) {
       return castObj.map((element, index) => {
-        if (index < 10) {
+        if (index < 100) {
           return (
             <Grid item key={index}>
               <Card className={classes.castCard}>
@@ -426,13 +426,13 @@ export default function PosterInfo() {
               >
                 User Score
               </Typography>
-              <ArrowRight
+              {/* <ArrowRight
                 className={classes.arrowRight}
                 style={{ fontSize: 30 }}
               />
               <Typography className={classes.playTrailer} component="span">
                 Play Trailer
-              </Typography>
+              </Typography> */}
             </Box>
             <Typography className={classes.tageLine}>{info.tagline}</Typography>
             <Typography className={classes.overView}>Overview</Typography>
@@ -444,7 +444,7 @@ export default function PosterInfo() {
           <Grid container>
             <Grid item container xs={9}>
               <Typography className={classes.topBilledCast} variant="h6">
-                Top Billed Cast
+                Cast
               </Typography>
               <Grid
                 item

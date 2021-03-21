@@ -63,7 +63,7 @@ export default function UpcomingMovies() {
   useEffect(() => {
     axios
       .get(
-        `https://api.themoviedb.org/3/discover/movie?api_key=84740a476602b16276f7d9e1093ff572&language=en-US&sort_by=primary_release_date.asc&include_adult=false&include_video=false&page=1&primary_release_date.gte=2021-01-01&sort_by=popularity.desc`
+        `https://api.themoviedb.org/3/discover/movie?api_key=84740a476602b16276f7d9e1093ff572&language=en-US&sort_by=primary_release_date.asc&include_adult=false&include_video=false&page=1&primary_release_date.gte=${upcomingDate}&sort_by=popularity.desc`
       )
       .then((res) => {
         setUpcomingMovies(res.data.results);

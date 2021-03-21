@@ -11,7 +11,6 @@ import {
 import SearchIcon from "@material-ui/icons/Search";
 import React from "react";
 import { Link, useHistory } from "react-router-dom";
-import Results from '../pages/Results'
 
 const useStyles = makeStyles((theme) => ({
   brand: {
@@ -66,7 +65,6 @@ const useStyles = makeStyles((theme) => ({
   },
   inputInput: {
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     transition: theme.transitions.create("width"),
     width: "100%",
@@ -104,13 +102,13 @@ export default function NavBar() {
                 The Reviewer
               </Typography>
             </Link>
-            <Button className={classes.moviesButton} color="inherit">
+            {/* <Button className={classes.moviesButton} color="inherit">
               Movies
             </Button>
             <Button className={classes.tvShowsButton} color="inherit">
               TV Shows
-            </Button>
-            <Box component="span" position="absolute" right={446.78}>
+            </Button> */}
+            <Box component="span" position="absolute" right={250.78}>
               <div className={classes.search}>
                 <div className={classes.searchIcon}>
                   <SearchIcon color="secondary" />
@@ -126,14 +124,14 @@ export default function NavBar() {
                 />
               </div>
             </Box>
-            <Box component="span" position="absolute" right={264}>
+            {/* <Box component="span" position="absolute" right={264}>
               <Button className={classes.loginButton} color="inherit">
                 Login
               </Button>
               <Button className={classes.joinUsButton} color="inherit">
                 Join us
               </Button>
-            </Box>
+            </Box> */}
           </Box>
         </Toolbar>
       </AppBar>
