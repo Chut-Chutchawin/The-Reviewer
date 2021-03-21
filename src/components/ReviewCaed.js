@@ -7,13 +7,7 @@ import {
   Typography,
   Card,
   CardActionArea,
-  CardContent,
   Button,
-  Divider,
-  InputLabel,
-  MenuItem,
-  FormControl,
-  Select,
 } from "@material-ui/core/";
 
 const useStyles = makeStyles({
@@ -35,31 +29,80 @@ const useStyles = makeStyles({
     width: 60,
     height: 60,
   },
+  wrapType: {
+    marginTop: 18,
+  },
+  overall: {
+    marginLeft: 10,
+  },
+  script: {
+    marginLeft: 10,
+  },
+  scene: {
+    marginLeft: 10,
+  },
+  actor: {
+    marginLeft: 10,
+  },
 });
 
 export default function ReviewCaed(props) {
   const [reviews, setReviews] = useState([]);
   const classes = useStyles();
-  const ref = firebase.firestore().collection(`${props.title}`).where("sentiment", "==", `${props.sentiment}`);
+  const ref = firebase
+    .firestore()
+    .collection(`${props.title}`)
+    .where("sentiment", "==", `${props.sentiment}`);
   const getReview = () => {
-    // ref
-    //   .where("sentiment", "==", `${props.sentiment}`)
-    //   .onSnapshot((querySnapshot) => {
-    //     const items = [];
-    //     querySnapshot.forEach((doc) => {
-    //       items.push(doc.data());
-    //     });
-    //     setReviews(items);
-    //   });
     ref.get().then((item) => {
-      const items = item.docs.map((doc) => doc.data())
-      setReviews(items)
-    })
+      const items = item.docs.map((doc) => doc.data());
+      setReviews(items);
+    });
   };
   console.log(props.sentiment);
   useEffect(() => {
     getReview();
   }, [props.toggle]);
+
+  const showOverall = (overall) => {
+    if (overall) {
+      return (
+        <Button variant="contained" className={classes.overall}>
+          overall
+        </Button>
+      );
+    }
+  };
+
+  const showScript = (script) => {
+    if (script) {
+      return (
+        <Button variant="contained" className={classes.script}>
+          script
+        </Button>
+      );
+    }
+  };
+
+  const showScene = (scene) => {
+    if (scene) {
+      return (
+        <Button variant="contained" className={classes.scene}>
+          scene
+        </Button>
+      );
+    }
+  };
+
+  const showActor = (actor) => {
+    if (actor) {
+      return (
+        <Button variant="contained" className={classes.actor}>
+          actor/actress
+        </Button>
+      );
+    }
+  };
 
   const showReview = () => {
     if (reviews) {
@@ -78,6 +121,12 @@ export default function ReviewCaed(props) {
                 <Typography className={classes.reviewOverview}>
                   {obj.desc}
                 </Typography>
+              </Box>
+              <Box className={classes.wrapType}>
+                {showOverall(obj.is_overall)}
+                {showScript(obj.is_movie_script)}
+                {showScene(obj.is_movie_scene)}
+                {showActor(obj.is_actor)}
               </Box>
             </CardActionArea>
           </Card>
